@@ -40,3 +40,12 @@ func (ag *Agencia) EditColor(Patente string, Color string){
 
 	
 }
+
+func (ag *Agencia) BuscarAuto(Patente string) *Auto{
+	 for index := 0; index < len(ag.autos); index++ {
+		 if ag.autos[index].Patente == Patente{
+			 return  &ag.autos[index]
+		 }
+	 }
+	 return nil
+}

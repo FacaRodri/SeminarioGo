@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"seminario/otracarpeta"
+	"seminario/SeminarioGo/otracarpeta"
 
 	"github.com/gin-gonic/gin"
 )
+
+var agencia otracarpeta.Agencia
 
 func main() {
 	fmt.Printf("quien?\n")
@@ -18,7 +20,7 @@ func main() {
 	auto2 := otracarpeta.NewAuto("2B", "Gris", "Ford")
 	auto3 := otracarpeta.NewAuto("3C", "Plateado", "VMW")
 	auto4 := otracarpeta.NewAuto("4D", "Negro", "VMW")
-	agencia := otracarpeta.NewAgencia()
+	agencia = otracarpeta.NewAgencia()
 
 	//Agrego autos
 	agencia.AddAuto(auto1, auto2, auto3, auto4)
@@ -56,11 +58,23 @@ func main() {
 
 	router.GET("/hello", GetHello)
 
+	router.GET("/agencia/:patente", BuscarAuto)
+
 	if err := router.Run(); err != nil {
 		fmt.Println(err)
 	}
 
 }
+
+//CONTROLLER
+func BuscarAuto(ctx *gin.Context)  {
+	patente := ctx.Param("patente")
+	result := agencia.BuscarAuto(patente)
+	ctx.JSON(http.StatusOK, gin.H{
+		"Resultado": result,
+	})
+}
+/////
 
 func GetHello(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
